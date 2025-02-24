@@ -45,7 +45,7 @@ const Game = () => {
       // 更新炸彈位置
       setBombs(prev => prev.map(bomb => ({
         ...bomb,
-        y: bomb.y + 1
+        y: bomb.y + 0.5  // 改為較小的增量
       })).filter(bomb => {
         if (bomb.y >= 90 && Math.abs(bomb.x - playerPosition) < 10) {
           setScore(s => s + 1);
@@ -57,7 +57,7 @@ const Game = () => {
         }
         return true;
       }));
-    }, 100);
+    }, 16);  // 改為 16ms (約60FPS)
 
     return () => {
       clearInterval(timeInterval);
@@ -97,7 +97,7 @@ const Game = () => {
       {/* 玩家 */}
       {/* 玩家 */}
       <div
-        className="absolute bottom-16 w-16 h-16 bg-blue-500 rounded-lg shadow-xl"
+        className="absolute bottom-32 w-16 h-16 bg-blue-500 rounded-lg shadow-xl"
         style={{ 
           left: `${playerPosition}%`, 
           transform: 'translateX(-50%)'
@@ -106,7 +106,7 @@ const Game = () => {
 
 {/* 觸控事件區域 - 也需要調整 */}
 <div
-  className="absolute bottom-0 left-0 right-0 h-40 bg-transparent"
+  className="absolute bottom-0 left-0 right-0 h-48 bg-transparent"
   onTouchMove={handleTouchMove}
 />
 
