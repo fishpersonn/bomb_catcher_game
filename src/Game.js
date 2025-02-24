@@ -95,13 +95,20 @@ const Game = () => {
       ))}
 
       {/* 玩家 */}
+      {/* 玩家 */}
       <div
-        className="absolute bottom-8 w-16 h-16 bg-blue-500 rounded-lg shadow-xl"
+        className="absolute bottom-16 w-16 h-16 bg-blue-500 rounded-lg shadow-xl"
         style={{ 
           left: `${playerPosition}%`, 
           transform: 'translateX(-50%)'
         }}
       />
+
+{/* 觸控事件區域 - 也需要調整 */}
+<div
+  className="absolute bottom-0 left-0 right-0 h-40 bg-transparent"
+  onTouchMove={handleTouchMove}
+/>
 
       {/* 遊戲結束畫面 */}
       {gameOver && (
@@ -121,8 +128,8 @@ const Game = () => {
       
       {/* 觸控事件區域 */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-32"
-        onTouchMove={handleTouchMove}
+         className="absolute bottom-0 left-0 right-0 h-40 bg-transparent"
+          onTouchMove={handleTouchMove}
       />
     </div>
   );
