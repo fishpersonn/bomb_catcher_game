@@ -1,3 +1,12 @@
+遊戲時間：修改 Game.js 中的 const [time, setTime] = useState(60)
+生命值：修改 const [health, setHealth] = useState(100)
+炸彈下落速度：修改 y: bomb.y + 1 的數值
+炸彈生成頻率：修改 Math.random() < 0.05 的數值
+碰撞判定範圍：修改 Math.abs(bomb.x - playerPosition) < 10 的數值
+玩家大小：修改 w-16 h-16 類名
+炸彈大小：修改 w-8 h-8 類名
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

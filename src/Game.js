@@ -19,10 +19,9 @@ const Game = () => {
   // 遊戲主循環
   useEffect(() => {
     if (gameOver) return;
-
-    // 每 100ms 更新一次遊戲狀態
-const gameLoop = setInterval(() => {
-      // 更新時間
+    
+    // 時間更新，每1000ms（1秒）更新一次
+    const timeInterval = setInterval(() => {
       setTime(prev => {
         if (prev <= 0) {
           setGameOver(true);
@@ -30,9 +29,12 @@ const gameLoop = setInterval(() => {
         }
         return prev - 1;
       });
+    }, 1000);
 
+    // 遊戲邏輯更新（炸彈等），可以保持較快的更新頻率
+    const gameLoop = setInterval(() => {
       // 生成新炸彈
-      if (Math.random() < 0.05) {  // 降低炸彈生成機率
+      if (Math.random() < 0.05) {
         setBombs(prev => [...prev, {
           x: Math.random() * 100,
           y: 0,
@@ -45,12 +47,10 @@ const gameLoop = setInterval(() => {
         ...bomb,
         y: bomb.y + 1
       })).filter(bomb => {
-        // 檢查碰撞
         if (bomb.y >= 90 && Math.abs(bomb.x - playerPosition) < 10) {
           setScore(s => s + 1);
           return false;
         }
-        // 檢查是否錯過炸彈
         if (bomb.y > 100) {
           setHealth(h => Math.max(0, h - 10));
           return false;
@@ -59,7 +59,10 @@ const gameLoop = setInterval(() => {
       }));
     }, 100);
 
-    return () => clearInterval(gameLoop);
+    return () => {
+      clearInterval(timeInterval);
+      clearInterval(gameLoop);
+    };
   }, [gameOver, playerPosition]);
 
   // 檢查遊戲結束條件
