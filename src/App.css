@@ -3,6 +3,7 @@
     height: 100vh;
     width: 100vw;
     overflow: hidden;
+    touch-action: none;
   }
   
   * {
@@ -16,4 +17,26 @@
     position: fixed;
     width: 100%;
     height: 100%;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  @media (max-height: 600px) {
+    .bottom-32 {
+      bottom: 20vh;
+    }
+  }
+
+  /* 添加動畫效果 */
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-5%);
+    }
+    50% {
+      transform: translateY(0);
+    }
+  }
+
+  .animate-bounce {
+    animation: bounce 0.5s infinite;
   }
