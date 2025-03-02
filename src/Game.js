@@ -115,9 +115,10 @@ const Game = () => {
   const gameLoop = useCallback((timestamp) => {
     // 生成炸彈
     if (timestamp - lastBombTimeRef.current > BOMB_GENERATION_INTERVAL) {
-      if (Math.random() < 0.6) { // 從 0.4 提高到 0.6，增加生成機率
+      if (Math.random() < 0.6) {
         setBombs(prev => [...prev, {
-          x: Math.random() * 100,
+          // 限制炸彈生成範圍在 10% 到 90% 之間
+          x: 10 + Math.random() * 80, // 避免炸彈生成在邊緣
           y: 0,
           id: Date.now(),
           speed: BOMB_FALLING_SPEED * (0.8 + Math.random() * 0.4)
@@ -139,35 +140,35 @@ const Game = () => {
 
       updatedBombs.forEach(bomb => {
         const BASKET_TOP = 100 - BASKET_BOTTOM;
-        const basketLeft = playerPosition - BASKET_WIDTH;
-        const basketRight = playerPosition + BASKET_WIDTH;
-        const basketTop = BASKET_TOP - BASKET_TOP_OFFSET;
-        
-        // 改進的碰撞檢測
-        const inBasketHorizontally = bomb.x >= basketLeft && bomb.x <= basketRight;
-        const inBasketVertically = bomb.y >= basketTop && bomb.y <= BASKET_TOP;
-        const bombPastBasket = bomb.y > (BASKET_TOP );
+        const basketLeft = Math.max(0, playerPosition - BASKET_WIDTH); // 確保不會超出左邊
+        const basketRight = Math.min(100, playerPosition + BASKET_WIDTH); // 確保不會超出右邊
+        const basketTop = BASKET_TOP - BASKET_TOP_OFFSET + 15;
 
-        if (inBasketHorizontally && inBasketVertically) {
-          scoreIncrement += 1;
-          try {
-            catchSound.currentTime = 0;
-            catchSound.play().catch(error => {
-              console.log("音效播放失敗:", error);
-            });
-          } catch (error) {
-            console.log("音效播放失敗:", error);
+        // 檢查炸彈是否在有效範圍內
+        if (bomb.x >= 0 && bomb.x <= 100) {
+          const inBasketHorizontally = bomb.x >= basketLeft && bomb.x <= basketRight;
+          const inBasketVertically = bomb.y >= basketTop && bomb.y <= (BASKET_TOP + 5);
+          const bombPastBasket = bomb.y > (BASKET_TOP + 15);
+
+          if (inBasketHorizontally && inBasketVertically) {
+            scoreIncrement += 1;
+            try {
+              catchSound.currentTime = 0;
+              catchSound.play().catch(console.error);
+            } catch (error) {
+              console.log("播放音效失敗:", error);
+            }
+          } else if (bombPastBasket) {
+            healthDecrement += 1;
+            try {
+              missSound.currentTime = 0;
+              missSound.play().catch(console.error);
+            } catch (error) {
+              console.log("播放音效失敗:", error);
+            }
+          } else {
+            remainingBombs.push(bomb);
           }
-        } else if (bombPastBasket) {
-          healthDecrement += 1;
-          try {
-            missSound.currentTime = 0;
-            missSound.play().catch(console.error);
-          } catch (error) {
-            console.log("播放音效失敗:", error);
-          }
-        } else {
-          remainingBombs.push(bomb);
         }
       });
 
