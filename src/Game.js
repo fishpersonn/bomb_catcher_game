@@ -18,8 +18,8 @@ const Game = () => {
   const BOMB_GENERATION_INTERVAL = 500; // 從 800 降低到 500，更頻繁生成炸彈
   const BOMB_FALLING_SPEED = 0.35; // 微調下落速度
   const BASKET_BOTTOM = 32;
-  const BASKET_TOP_OFFSET = 5; // 保持小的檢測高度
-  const BASKET_WIDTH = 15;
+  const BASKET_TOP_OFFSET = 8; // 增加檢測區域高度
+  const BASKET_WIDTH = 18; // 增加水平檢測範圍
   
   // 碰撞檢測參數 - 調整為更接近視覺效果
   
@@ -142,13 +142,13 @@ const Game = () => {
         const BASKET_TOP = 100 - BASKET_BOTTOM;
         const basketLeft = Math.max(0, playerPosition - BASKET_WIDTH); // 確保不會超出左邊
         const basketRight = Math.min(100, playerPosition + BASKET_WIDTH); // 確保不會超出右邊
-        const basketTop = BASKET_TOP - BASKET_TOP_OFFSET + 15;
+        const basketTop = BASKET_TOP - BASKET_TOP_OFFSET + 10; // 調整檢測起始位置
 
         // 檢查炸彈是否在有效範圍內
         if (bomb.x >= 0 && bomb.x <= 100) {
           const inBasketHorizontally = bomb.x >= basketLeft && bomb.x <= basketRight;
-          const inBasketVertically = bomb.y >= basketTop && bomb.y <= (BASKET_TOP + 5);
-          const bombPastBasket = bomb.y > (BASKET_TOP + 15);
+          const inBasketVertically = bomb.y >= basketTop && bomb.y <= (BASKET_TOP + 8);
+          const bombPastBasket = bomb.y > (BASKET_TOP + 20); // 增加過籃判定距離
 
           if (inBasketHorizontally && inBasketVertically) {
             scoreIncrement += 1;
@@ -223,7 +223,7 @@ const Game = () => {
     
     const BASKET_TOP = 100 - BASKET_BOTTOM;
     const basketLeft = playerPosition - BASKET_WIDTH;
-    const basketTop = BASKET_TOP - BASKET_TOP_OFFSET + 15; // 增加偏移值，讓紅框下移到籃子位置
+    const basketTop = BASKET_TOP - BASKET_TOP_OFFSET + 10; // 調整檢測起始位置
     
     return (
       <>
@@ -318,8 +318,8 @@ const Game = () => {
               alt="Spirit Guardian Logo" 
               className="w-20 h-20 mx-auto mb-3"
             />
-            <h2 className="text-2xl mb-2">Spirit Guardian</h2>
-            <h3 className="text-xl mb-3">靈魂守衛者</h3>
+            <h2 className="text-2xl mb-2">大士爺擋砲彈遊戲</h2>
+            
             
             {/* 遊戲說明 */}
             <div className="text-left mb-4 bg-gray-700 p-3 rounded-lg">
@@ -353,8 +353,8 @@ const Game = () => {
               alt="Spirit Guardian Logo" 
               className="w-20 h-20 mx-auto mb-3"
             />
-            <h2 className="text-2xl mb-2">Spirit Guardian</h2>
-            <h3 className="text-xl mb-3">靈魂守衛者</h3>
+            <h2 className="text-2xl mb-2">大士爺擋砲彈遊戲</h2>
+            
             
             {/* 遊戲結果 */}
             <div className="bg-gray-700 p-4 rounded-lg mb-6">
@@ -379,12 +379,7 @@ const Game = () => {
               >
                 再玩一次
               </button>
-              <button
-                className="px-6 py-3 bg-gray-500 rounded-lg hover:bg-gray-600 transition-colors"
-                onClick={() => window.location.reload()}
-              >
-                重新整理
-              </button>
+              
             </div>
           </div>
         </div>
